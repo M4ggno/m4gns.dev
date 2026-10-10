@@ -1,59 +1,45 @@
-# M4gnsDev
+# M4GNS.DEV
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.7.
+Landing page comercial do `m4gns.dev` — venda de serviços de engenharia de software (landing pages, sistemas full-stack, integrações). Headline: **Your Idea. My Code. Live Production.** SPA Angular 22 estática, deploy **100% Vercel, sem Next.js**.
 
-## Development server
+## Stack
 
-To start a local development server, run:
+- **Framework:** Angular 22 (standalone, signals, `OnPush`, zero `@angular/router`)
+- **3D:** Three.js (núcleo galáctico: horizonte de eventos + anel de fótons, disco de acreção com rotação diferencial e braços espirais, halo estelar, anéis orbitais + cometas) — **reativo ao mouse e ao giroscópio do celular**
+- **Motion:** GSAP + ScrollTrigger + Lenis (tudo fora da `NgZone`, via `MotionService`)
+- **Estilo:** Tailwind CSS v4 + design tokens `@theme` (Space Grotesk / Syne / JetBrains Mono)
+- **Conversão:** contato direto — `mailto:contato@m4gns.dev` + Instagram `@m4gns.dev` + GitHub. Zero formulário, zero serverless.
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Desenvolvimento
 
 ```bash
-ng generate component component-name
+ng serve          # http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Build e testes
 
 ```bash
-ng generate --help
+ng build          # produção em dist/
+ng test           # Vitest
 ```
 
-## Building
+## Estrutura
 
-To build the project run:
-
-```bash
-ng build
+```
+src/app/
+├── core/          # site.config, attack-mode, motion, orbital-scene (Three puro)
+├── features/      # background-canvas, hero, services, stack, work, contact, footer
+└── shared/        # section-heading, reveal.directive
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Segurança (borda)
 
-## Running unit tests
+A defesa acontece **na borda da Vercel**, não no navegador:
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+1. **`vercel.json`** → headers de segurança (HSTS/CSP/nosniff/COOP/CORP), cache imutável, rewrites de bloqueio (`/.env`, `/.git/*`, `/wp-*`) e fallback SPA.
+2. **Vercel Firewall** (painel) → rate limiting (ex. 100 req/10s/IP), Attack Challenge Mode e WAF.
+3. **`AttackModeService`** (client-side) → autodefesa do navegador sob telemetria anômala (congela animações, nunca a borda).
 
-```bash
-ng test
-```
+> `middleware.ts` não roda em SPA Angular (é runtime do Next.js) — por isso não existe neste projeto.
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Mais detalhes em [`stack.md`](./stack.md).

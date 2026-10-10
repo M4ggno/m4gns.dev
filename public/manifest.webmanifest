@@ -1,0 +1,29 @@
+{
+  "name": "M4GNS.DEV — Sua ideia, meu código, em produção",
+  "short_name": "M4GNS",
+  "description": "Sua ideia, meu código, em produção: landing pages e sistemas web sob encomenda — Angular 22, Three.js, Spring Boot, Django.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "icons": [
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

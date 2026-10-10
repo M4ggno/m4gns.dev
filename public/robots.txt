@@ -1,0 +1,6 @@
+# robots.txt for https://m4gns.dev/
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://m4gns.dev/sitemap.xml

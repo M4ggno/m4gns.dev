@@ -1,0 +1,157 @@
+import { ChangeDetectionStrategy, Component, ElementRef, NgZone, afterNextRender, inject, viewChild } from '@angular/core';
+import { gsap } from 'gsap';
+import { MotionService } from '@core/motion/motion.service';
+
+/**
+ * Hero + navegação. Responsável apenas pela sequência de abertura e pelo
+ * encaminhamento de âncoras para o MotionService (scroll suave).
+ */
+@Component({
+  selector: 'app-hero',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [],
+  template: `
+    <header #headerBar
+      class="fixed inset-x-0 top-0 z-40 flex items-center justify-between border-b border-white/5 bg-[#050505]/40 px-5 py-5 font-mono text-[11px] text-[#8A8A8A] backdrop-blur-md md:px-16 md:text-xs"
+      [class.opacity-100]="visible" [class.opacity-0]="!visible">
+      <a href="#top" class="flex items-center gap-3 text-[#F5F5F5] tracking-[0.25em] transition-colors hover:text-white" (click)="go($event, '#top')">
+        <span class="h-2 w-2 rounded-full bg-[#10B981]"></span>
+        M4GNS.DEV
+      </a>
+
+      <nav class="hidden gap-7 tracking-widest md:flex" aria-label="Navegação principal">
+        @for (item of nav; track item.target) {
+          <a [href]="item.target" (click)="go($event, item.target)" class="py-1 transition-colors hover:text-white">
+            [ {{ item.index }} / {{ item.label }} ]
+          </a>
+        }
+      </nav>
+
+      <span class="text-[10px] tracking-widest text-[#666666]">VERCEL EDGE // SÃO PAULO</span>
+    </header>
+
+    <section id="top" class="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-24 text-center">
+      <!-- Boot overlay: limpa a tela antes do conteúdo entrar -->
+      <div #bootOverlay class="pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-[#050505]">
+        <div class="flex items-center gap-3 font-mono text-xs tracking-[0.4em] text-[#8A8A8A] md:text-sm">
+          <span class="inline-block h-2 w-2 bg-white"></span>
+          <span #bootText>CARREGANDO CANAL...</span>
+        </div>
+      </div>
+
+      <div class="my-auto flex max-w-5xl flex-col items-center gap-6 md:gap-8">
+        <div #logoWrapper class="opacity-0">
+          <img src="logo.svg" alt="M4GNS.DEV" width="144" height="144"
+             fetchpriority="high" decoding="async"
+             class="mx-auto h-auto w-28 drop-shadow-[0_0_35px_rgba(255,255,255,0.18)] md:w-36" />
+        </div>
+
+        <p #eyebrow class="font-mono text-[10px] uppercase tracking-[0.45em] text-[#8A8A8A] opacity-0 -translate-y-4 md:text-xs">
+          // ENGENHARIA WEB PARA QUEM EXIGE RESULTADO
+        </p>
+
+        <h1 #mainTitle
+            class="max-w-5xl text-4xl font-display font-light leading-[0.98] tracking-tight text-[#F5F5F5] opacity-0 translate-y-8 sm:text-6xl md:text-7xl lg:text-8xl">
+          YOUR IDEA.<br />
+          <span class="italic text-white">MY CODE. LIVE PRODUCTION.</span>
+        </h1>
+
+        <p #tagline class="font-mono text-xs uppercase tracking-[0.35em] text-[#8A8A8A] opacity-0 md:text-sm" aria-live="polite">
+          {{ typed }}<span class="animate-pulse">_</span>
+        </p>
+      </div>
+
+      <div #scrollIndicator class="pointer-events-none absolute bottom-6 flex flex-col items-center opacity-0 md:bottom-10">
+        <span class="mb-2 font-mono text-[10px] tracking-[0.25em] text-[#8A8A8A]">ROLE PARA EXPLORAR</span>
+        <span class="h-8 w-px bg-gradient-to-b from-white/60 to-transparent md:h-10"></span>
+      </div>
+    </section>
+  `,
+})
+export class HeroComponent {
+  private readonly ngZone = inject(NgZone);
+  private readonly motion = inject(MotionService);
+
+  private readonly bootOverlay = viewChild<ElementRef<HTMLElement>>('bootOverlay');
+  private readonly bootText = viewChild<ElementRef<HTMLElement>>('bootText');
+  private readonly logoWrapper = viewChild<ElementRef<HTMLElement>>('logoWrapper');
+  private readonly eyebrow = viewChild<ElementRef<HTMLElement>>('eyebrow');
+  private readonly mainTitle = viewChild<ElementRef<HTMLElement>>('mainTitle');
+  private readonly tagline = viewChild<ElementRef<HTMLElement>>('tagline');
+  private readonly scrollIndicator = viewChild<ElementRef<HTMLElement>>('scrollIndicator');
+
+  visible = false;
+  typed = '';
+
+  readonly nav = [
+    { index: '01', label: 'SERVIÇOS', target: '#services' },
+    { index: '02', label: 'STACK', target: '#stack' },
+    { index: '03', label: 'TRABALHO', target: '#work' },
+    { index: '04', label: 'CONTATO', target: '#contact' },
+  ];
+
+  private readonly taglineText = 'FRONTEND // BACKEND // INFRA — SEM RUÍDO';
+
+  constructor() {
+    afterNextRender(() => this.ngZone.runOutsideAngular(() => this.playIntro()));
+  }
+
+  go(event: Event, target: string): void {
+    event.preventDefault();
+    this.motion.scrollTo(target);
+  }
+
+  private playIntro(): void {
+    const overlay = this.bootOverlay()?.nativeElement ?? null;
+    const bootText = this.bootText()?.nativeElement ?? null;
+    const logo = this.logoWrapper()?.nativeElement ?? null;
+    const eyebrow = this.eyebrow()?.nativeElement ?? null;
+    const title = this.mainTitle()?.nativeElement ?? null;
+    const indicator = this.scrollIndicator()?.nativeElement ?? null;
+
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      this.setVisible(true);
+      this.typed = this.taglineText;
+      if (overlay) overlay.style.display = 'none';
+      if (logo) logo.style.opacity = '1';
+      if (eyebrow) {
+        eyebrow.style.opacity = '1';
+        eyebrow.style.transform = 'none';
+      }
+      if (title) {
+        title.style.opacity = '1';
+        title.style.transform = 'none';
+      }
+      if (indicator) indicator.style.opacity = '1';
+      return;
+    }
+
+    gsap
+      .timeline({ defaults: { ease: 'power3.out' } })
+      .to(bootText, { opacity: 0, duration: 0.3, delay: 0.35 })
+      .to(overlay, {
+        opacity: 0,
+        duration: 0.6,
+        onComplete: () => overlay?.style.setProperty('display', 'none'),
+      })
+      .call(() => this.setVisible(true))
+      .to(logo, { opacity: 1, scale: 1, duration: 0.9 }, '-=0.35')
+      .to(eyebrow, { opacity: 1, y: 0, duration: 0.7 }, '-=0.7')
+      .to(title, { opacity: 1, y: 0, duration: 1 }, '-=0.55')
+      .call(() => this.typeTagline())
+      .to(indicator, { opacity: 1, duration: 0.7 }, '-=0.2');
+  }
+
+  private setVisible(value: boolean): void {
+    this.ngZone.run(() => (this.visible = value));
+  }
+
+  private typeTagline(): void {
+    let i = 0;
+    const step = () => {
+      this.ngZone.run(() => (this.typed = this.taglineText.slice(0, ++i)));
+      if (i < this.taglineText.length) setTimeout(step, 38);
+    };
+    step();
+  }
+}
