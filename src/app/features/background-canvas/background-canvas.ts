@@ -7,6 +7,7 @@ import {
   afterNextRender,
   effect,
   inject,
+  signal,
   viewChild,
 } from '@angular/core';
 import { AttackModeService } from '@core/security/attack-mode.service';
@@ -34,6 +35,18 @@ const GYRO_GESTURES = ['pointerdown', 'touchend', 'click'] as const;
       aria-hidden="true"
       style="background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,0.5) 2px 3px);"
     ></div>
+
+    <!-- iOS exige gesto explícito para os sensores: botão dedicado = gesto válido + feedback -->
+    @if (motionHint() && !motionGranted()) {
+      <button
+        type="button"
+        (click)="requestGyro()"
+        class="fixed bottom-4 left-4 z-40 flex items-center gap-2 border border-white/20 bg-black/70 px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-[#A3A3A3] backdrop-blur-md transition-colors hover:border-white/50 hover:text-white"
+      >
+        <span class="h-1.5 w-1.5 rounded-full bg-[#10B981]"></span>
+        Ativar movimento
+      </button>
+    }
   `,
 })
 export class BackgroundCanvasComponent {
@@ -46,6 +59,10 @@ export class BackgroundCanvasComponent {
   private scene?: OrbitalScene;
   private gyroAsked = false;
   private tiltOrigin?: { beta: number; gamma: number };
+
+  /** Exibe o botão de ativar movimento enquanto a permissão ainda não foi dada. */
+  protected readonly motionHint = signal(false);
+  protected readonly motionGranted = signal(false);
 
   constructor() {
     afterNextRender(() => this.init());
@@ -95,16 +112,18 @@ export class BackgroundCanvasComponent {
     window.addEventListener('pointermove', this.onPointerMove, { passive: true });
     window.addEventListener('blur', this.onPointerReset);
 
-    // iOS 13+ exige gesto do usuário para habilitar os sensores de movimento.
-    // Ouvimos vários tipos de gesto (o primeiro que chegar dispara o pedido):
-    // no iOS o `pointerdown` nem sempre é aceito como gesto válido.
+    // Sempre escutamos os sensores; no iOS o evento só passa a virar depois da
+    // permissão concedida. Atenção: pedimos a permissão em um gesto (o prompt
+    // exige gesto do usuário) — ouvimos vários tipos porque o iOS nem sempre
+    // aceita `pointerdown` como gesto válido.
+    window.addEventListener('deviceorientation', this.onOrientation, true);
+
     const DOE = OrbitalSceneHelpers.deviceOrientationEvent;
     if (DOE?.requestPermission) {
       for (const type of GYRO_GESTURES) {
         window.addEventListener(type, this.requestGyro, { once: true, capture: true });
       }
-    } else {
-      window.addEventListener('deviceorientation', this.onOrientation, true);
+      this.motionHint.set(true); // botão dedicado = gesto garantido + feedback
     }
 
     this.destroyRef.onDestroy(() => this.teardownInteraction());
@@ -134,23 +153,30 @@ export class BackgroundCanvasComponent {
     this.scene?.setTilt(beta, gamma);
   };
 
-  private readonly requestGyro = (): void => {
+  protected readonly requestGyro = (): void => {
     const DOE = OrbitalSceneHelpers.deviceOrientationEvent;
     if (!DOE?.requestPermission || this.gyroAsked) return;
     this.gyroAsked = true;
 
-    // Remove os demais gestos e já deixa o listener pronto: assim que a
-    // permissão for concedida, os eventos passam a alimentar a cena.
+    // O listener de `deviceorientation` já está sempre registrado; aqui só
+    // pedimos a permissão e paramos de ouvir os gestos (evita repetir o pedido).
     for (const type of GYRO_GESTURES) {
       window.removeEventListener(type, this.requestGyro, true);
     }
-    window.addEventListener('deviceorientation', this.onOrientation, true);
 
     DOE.requestPermission()
       .then((state) => {
-        if (state !== 'granted') window.removeEventListener('deviceorientation', this.onOrientation, true);
+        if (state === 'granted') {
+          this.motionGranted.set(true);
+          this.motionHint.set(false);
+        } else {
+          // Não concedido: libera nova tentativa (o botão segue visível).
+          this.gyroAsked = false;
+        }
       })
-      .catch(() => window.removeEventListener('deviceorientation', this.onOrientation, true));
+      .catch(() => {
+        this.gyroAsked = false;
+      });
   };
 
   private teardownInteraction(): void {

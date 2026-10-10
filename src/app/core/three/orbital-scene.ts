@@ -36,6 +36,14 @@ export class OrbitalScene {
   /** Tilt do giroscópio (beta, gamma) normalizado em -1..1. */
   private readonly tilt = new THREE.Vector2(0, 0);
 
+  /**
+   * Vetor final do "empurrão" no disco de acreção: ponteiro (mouse/toque) +
+   * giroscópio combinados. No celular o usuário não tem mouse, então o tilt
+   * alimenta o mesmo efeito — sem o tilt a interação da tela seria praticamente
+   * invisível (só a rotação sutil da galáxia).
+   */
+  private readonly pushPos = new THREE.Vector2(0, 0);
+
   private pointerActive = false;
 
   // Vetores reutilizáveis de raio → plano do disco (sem GC por frame).
@@ -499,7 +507,7 @@ export class OrbitalScene {
     this.camera.updateMatrixWorld();
     this.scene.updateMatrixWorld(true);
 
-    this.ndc.set(this.pointerPos.x, -this.pointerPos.y, 0.5).unproject(this.camera);
+    this.ndc.set(this.pushPos.x, -this.pushPos.y, 0.5).unproject(this.camera);
     this.camDir.copy(this.ndc).sub(this.camera.position).normalize();
 
     // Normal do plano do disco no mundo: o eixo Y local da galáxia.
@@ -567,7 +575,17 @@ export class OrbitalScene {
     if (this.disk) {
       const uniforms = (this.disk.material as THREE.ShaderMaterial).uniforms;
       uniforms['uTime'].value = this.elapsed;
-      if (this.pointerActive) this.updateMouseUniform(uniforms['uMouse'].value as THREE.Vector3);
+
+      // Empurrão combinado: ponteiro + giroscópio (atua como mouse virtual).
+      // Sem o tilt, no celular não haveria como empurrar as partículas.
+      this.pushPos.set(
+        THREE.MathUtils.clamp(this.pointerPos.x + this.tilt.y, -1, 1),
+        THREE.MathUtils.clamp(this.pointerPos.y + this.tilt.x, -1, 1),
+      );
+      const pushActive =
+        this.pointerActive || Math.abs(this.pushPos.x) > 0.02 || Math.abs(this.pushPos.y) > 0.02;
+
+      if (pushActive) this.updateMouseUniform(uniforms['uMouse'].value as THREE.Vector3);
       else uniforms['uMouse'].value.set(1000, 1000, 1000);
     }
     if (this.halo) {
@@ -577,9 +595,10 @@ export class OrbitalScene {
 
     this.moveComets();
 
-    // Deriva sutil da câmera — combina respiração própria com parallax do ponteiro.
-    this.camera.position.x = Math.sin(this.elapsed * 0.045) * 1.4 - this.pointerPos.x * 1.1;
-    this.camera.position.y = 5 + Math.cos(this.elapsed * 0.032) * 0.6 - this.pointerPos.y * 0.7;
+    // Deriva sutil da câmera — respiração própria + parallax do ponteiro E do
+    // giroscópio (o tilt age como mouse virtual, dando presença também no celular).
+    this.camera.position.x = Math.sin(this.elapsed * 0.045) * 1.4 - this.pointerPos.x * 1.1 - this.tilt.y * 1.1;
+    this.camera.position.y = 5 + Math.cos(this.elapsed * 0.032) * 0.6 - this.pointerPos.y * 0.7 - this.tilt.x * 0.7;
     this.camera.lookAt(0, 0, 0);
 
     this.renderer.render(this.scene, this.camera);
