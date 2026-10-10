@@ -12,6 +12,9 @@ import {
 import { AttackModeService } from '@core/security/attack-mode.service';
 import { OrbitalScene } from '@core/three/orbital-scene';
 
+/** Gestos que podem conceder permissão de sensores no iOS — o primeiro dispara o pedido. */
+const GYRO_GESTURES = ['pointerdown', 'touchend', 'click'] as const;
+
 /**
  * Hospeda o <canvas> fullscreen da cena orbital.
  * Responsabilidade única: ciclo de vida + encaminhamento de eventos.
@@ -41,6 +44,8 @@ export class BackgroundCanvasComponent {
   private readonly canvasRef = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
 
   private scene?: OrbitalScene;
+  private gyroAsked = false;
+  private tiltOrigin?: { beta: number; gamma: number };
 
   constructor() {
     afterNextRender(() => this.init());
@@ -90,11 +95,14 @@ export class BackgroundCanvasComponent {
     window.addEventListener('pointermove', this.onPointerMove, { passive: true });
     window.addEventListener('blur', this.onPointerReset);
 
-    // iOS 13+ exige gesto do usuário para sensores de movimento: pede no
-    // primeiro toque. Android/desktop seguem direto.
+    // iOS 13+ exige gesto do usuário para habilitar os sensores de movimento.
+    // Ouvimos vários tipos de gesto (o primeiro que chegar dispara o pedido):
+    // no iOS o `pointerdown` nem sempre é aceito como gesto válido.
     const DOE = OrbitalSceneHelpers.deviceOrientationEvent;
     if (DOE?.requestPermission) {
-      window.addEventListener('pointerdown', this.requestGyro, { once: true });
+      for (const type of GYRO_GESTURES) {
+        window.addEventListener(type, this.requestGyro, { once: true, capture: true });
+      }
     } else {
       window.addEventListener('deviceorientation', this.onOrientation, true);
     }
@@ -112,27 +120,46 @@ export class BackgroundCanvasComponent {
 
   private readonly onOrientation = (event: DeviceOrientationEvent): void => {
     if (event.beta == null || event.gamma == null) return;
-    const beta = OrbitalSceneHelpers.clamp(event.beta / 75, -1, 1);
-    const gamma = OrbitalSceneHelpers.clamp(event.gamma / 60, -1, 1);
+
+    // Calibra na primeira leitura: o "repouso" é como o usuário segura o
+    // aparelho, não a mesa. Sem isso, segurar o celular em pé (~beta 90°)
+    // já saturava o clamp e o giroscópio parecia morto no iOS.
+    if (this.tiltOrigin === undefined) {
+      this.tiltOrigin = { beta: event.beta, gamma: event.gamma };
+      return;
+    }
+
+    const beta = OrbitalSceneHelpers.clamp((event.beta - this.tiltOrigin.beta) / 30, -1, 1);
+    const gamma = OrbitalSceneHelpers.clamp((event.gamma - this.tiltOrigin.gamma) / 30, -1, 1);
     this.scene?.setTilt(beta, gamma);
   };
 
-  private readonly requestGyro = async (): Promise<void> => {
+  private readonly requestGyro = (): void => {
     const DOE = OrbitalSceneHelpers.deviceOrientationEvent;
-    if (!DOE?.requestPermission) return;
-    try {
-      const state = await DOE.requestPermission();
-      if (state === 'granted') window.addEventListener('deviceorientation', this.onOrientation, true);
-    } catch {
-      // permissão negada — seguimos só com parallax de ponteiro
+    if (!DOE?.requestPermission || this.gyroAsked) return;
+    this.gyroAsked = true;
+
+    // Remove os demais gestos e já deixa o listener pronto: assim que a
+    // permissão for concedida, os eventos passam a alimentar a cena.
+    for (const type of GYRO_GESTURES) {
+      window.removeEventListener(type, this.requestGyro, true);
     }
+    window.addEventListener('deviceorientation', this.onOrientation, true);
+
+    DOE.requestPermission()
+      .then((state) => {
+        if (state !== 'granted') window.removeEventListener('deviceorientation', this.onOrientation, true);
+      })
+      .catch(() => window.removeEventListener('deviceorientation', this.onOrientation, true));
   };
 
   private teardownInteraction(): void {
     window.removeEventListener('pointermove', this.onPointerMove);
     window.removeEventListener('blur', this.onPointerReset);
     window.removeEventListener('deviceorientation', this.onOrientation, true);
-    window.removeEventListener('pointerdown', this.requestGyro);
+    for (const type of GYRO_GESTURES) {
+      window.removeEventListener(type, this.requestGyro, true);
+    }
   }
 
   private supportsWebGl(): boolean {

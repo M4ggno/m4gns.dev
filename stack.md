@@ -87,7 +87,7 @@ Interação com o **ponteiro sobre as partículas**: o cursor é projetado do ND
 ### Performance
 
 - RAF apenas; `renderer.setPixelRatio(min(dpr, 2))`; `ACESFilmicToneMapping`.
-- **Interação reativa**: parallax de **ponteiro** (`pointermove` no window — o canvas segue `pointer-events-none`, conteúdo clicável) e **giroscópio** (`deviceorientation`, com `requestPermission` no 1º toque para iOS). `setPointer()`/`setTilt()` guardam offsets; o tick aplica damping (inércia suave) na rotação da galáxia e da câmera.
+- **Interação reativa**: parallax de **ponteiro** (`pointermove` no window — o canvas segue `pointer-events-none`, conteúdo clicável) e **giroscópio** (`deviceorientation`; no iOS o `requestPermission` é pedido no primeiro gesto — `pointerdown`/`touchend`/`click` —, e o tilt é **calibrado na primeira leitura** para medir o delta em relação à posição de uso, não à mesa). `setPointer()`/`setTilt()` guardam offsets; o tick aplica damping (inércia suave) na rotação da galáxia e da câmera.
 - Dispose rigoroso: geometrias, materiais, renderer, `cancelAnimationFrame` e remoção de listeners de interação.
 - Pausa em `document.hidden`; pausa no modo de proteção; frame único se `prefers-reduced-motion` (sem interação).
 - Fallback: sem `webgl2`, nada renderiza (site permanece utilizável).
