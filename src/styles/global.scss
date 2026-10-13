@@ -66,6 +66,18 @@ html.lenis body {
   background: rgba(255, 255, 255, 0.35);
 }
 
+/* Boot: cursor de terminal (bloco) piscando — CSS puro, anima até no HTML
+   pré-renderizado (não depende de JS). Reduced-motion é neutralizado abaixo. */
+@keyframes boot-cursor-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.boot-cursor {
+  animation: boot-cursor-blink 1.1s step-end infinite;
+}
+
 /* Acessibilidade: respeita usuários que pedem menos movimento */
 @media (prefers-reduced-motion: reduce) {
   *,
