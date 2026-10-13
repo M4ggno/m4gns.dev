@@ -87,7 +87,8 @@ export class HeroComponent {
     { index: '01', label: 'SERVIÇOS', target: '#services' },
     { index: '02', label: 'STACK', target: '#stack' },
     { index: '03', label: 'TRABALHO', target: '#work' },
-    { index: '04', label: 'CONTATO', target: '#contact' },
+    { index: '04', label: 'FAQ', target: '#faq' },
+    { index: '05', label: 'CONTATO', target: '#contact' },
   ];
 
   private readonly taglineText = 'FRONTEND // BACKEND // INFRA — SEM RUÍDO';

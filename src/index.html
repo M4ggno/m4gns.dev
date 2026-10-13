@@ -92,6 +92,65 @@
   }
   </script>
 
+  <!-- FAQPage (AEO/GEO): espelha a seção FAQ em src/app/features/faq/faq.data.ts.
+       Mantenha em sincronia — o prerender (SSG) congela ambos no HTML. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Quanto custa um projeto?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Não existe tabela fixa — existe dado. O diagnóstico técnico é gratuito e sai em até 48h; a proposta chega com preço fechado, prazo e condição de pagamento, por escrito e sem surpresa no meio do caminho."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Qual o prazo de entrega?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Landing pages de alta conversão: 7 a 14 dias. Sistemas sob medida: 4 a 12 semanas, conforme o escopo. O prazo entra no contrato e é cumprido em marcos — nunca numa data mágica."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Como funciona o processo?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Diagnóstico técnico (até 48h) → proposta por escrito → desenvolvimento com entrega semanal → deploy em produção. Você fala direto com o engenheiro responsável, sem gerente de conta no meio."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "E se eu não entender de tecnologia?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Você não precisa. O diagnóstico converte problema de negócio em escopo técnico, e cada entrega semanal é descrita por resultado — nunca por jargão. O contrato é escrito para quem não é técnico."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "E depois que o site estiver no ar?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A entrega inclui documentação, acessos e dados do projeto. A manutenção é opcional — plano mensal ou atendimento sob demanda — sempre pelo canal direto, com resposta em até 48h."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Atendem clientes fora do Brasil?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sim. O trabalho é 100% remoto, com alinhamento por vídeo nos marcos e comunicação assíncrona por e-mail. A única diferença é o fuso do e-mail."
+        }
+      }
+    ]
+  }
+  </script>
+
   <!-- Tipografia Editorial Industrial: Space Grotesk (texto), Syne (display), JetBrains Mono (dados) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

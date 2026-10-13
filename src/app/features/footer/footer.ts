@@ -110,6 +110,7 @@ export class FooterComponent {
     { label: 'SERVIÇOS', target: '#services' },
     { label: 'STACK', target: '#stack' },
     { label: 'TRABALHO', target: '#work' },
+    { label: 'FAQ', target: '#faq' },
     { label: 'CONTATO', target: '#contact' },
   ];
 

@@ -4,6 +4,7 @@ import { HeroComponent } from './features/hero/hero';
 import { ServicesComponent } from './features/services/services';
 import { StackComponent } from './features/stack/stack';
 import { WorkComponent } from './features/work/work';
+import { FaqComponent } from './features/faq/faq';
 import { ContactComponent } from './features/contact/contact';
 import { FooterComponent } from './features/footer/footer';
 import { AttackModeService } from './core/security/attack-mode.service';
@@ -22,6 +23,7 @@ import { MotionService } from './core/motion/motion.service';
     ServicesComponent,
     StackComponent,
     WorkComponent,
+    FaqComponent,
     ContactComponent,
     FooterComponent,
   ],
@@ -35,6 +37,7 @@ import { MotionService } from './core/motion/motion.service';
       <app-services />
       <app-stack />
       <app-work />
+      <app-faq />
       <app-contact />
       <app-footer />
     </div>

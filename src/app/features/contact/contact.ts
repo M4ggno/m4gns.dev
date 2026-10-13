@@ -19,7 +19,7 @@ import { SITE } from '@core/site.config';
       <div class="mx-auto w-full max-w-7xl">
         <app-section-heading
           appReveal
-          index="04"
+          index="05"
           label="CONTATO"
           title="Estabelecer"
           accent="ligação direta."
