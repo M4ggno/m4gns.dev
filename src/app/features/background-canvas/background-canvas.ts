@@ -36,7 +36,7 @@ const GYRO_GESTURES = ['pointerdown', 'touchend', 'click'] as const;
       style="background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,0.5) 2px 3px);"
     ></div>
 
-    <!-- iOS exige gesto explícito para os sensores: botão dedicado = gesto válido + feedback -->
+    <!-- No iPhone (iOS/Safari) a permissão de sensores exige gesto explícito: botão dedicado = gesto válido + feedback. Gate por device (isIPhone) — Chrome 154+ (Android/desktop) também expõe requestPermission e botão fixo lá é ruído. -->
     @if (motionHint() && !motionGranted()) {
       <button
         type="button"
@@ -126,7 +126,12 @@ export class BackgroundCanvasComponent {
       for (const type of GYRO_GESTURES) {
         window.addEventListener(type, this.requestGyro, { once: true, capture: true });
       }
-      this.motionHint.set(true); // botão dedicado = gesto garantido + feedback
+      // Botão dedicado só no iPhone: é o único lugar onde o pedido de permissão
+      // acontece por gesto explícito (Safari/iOS). Chrome p/ Android e desktop
+      // (154+/152+) também expõem requestPermission agora — botão fixo lá é ruído.
+      if (OrbitalSceneHelpers.isIPhone()) {
+        this.motionHint.set(true);
+      }
     }
 
     this.destroyRef.onDestroy(() => this.teardownInteraction());
@@ -213,4 +218,8 @@ namespace OrbitalSceneHelpers {
     typeof window !== 'undefined'
       ? (window.DeviceOrientationEvent as DeviceOrientationEventCtor)
       : undefined;
+
+  /** iPhone/iPod real (via UA) — único dispositivo com botão dedicado de permissão. */
+  export const isIPhone = (): boolean =>
+    typeof navigator !== 'undefined' && /iPhone|iPod/.test(navigator.userAgent);
 }
