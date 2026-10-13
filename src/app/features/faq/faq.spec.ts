@@ -11,20 +11,39 @@ describe('FaqComponent', () => {
     fixture.detectChanges();
   });
 
-  it('renderiza todas as perguntas da FAQ', () => {
-    const heads = fixture.nativeElement.querySelectorAll('h3');
-    expect(heads.length).toBe(FAQ_DATA.length);
+  it('renderiza um comando (pergunta) por item da FAQ', () => {
+    const buttons = fixture.nativeElement.querySelectorAll('button[aria-expanded]');
+    expect(buttons.length).toBe(FAQ_DATA.length);
   });
 
-  it('cada cartão exibe a pergunta seguida da resposta esperada', () => {
-    const articles = fixture.nativeElement.querySelectorAll('article');
-    expect(articles.length).toBe(FAQ_DATA.length);
+  it('exibe todos os comandos CLI esperados', () => {
+    const text = fixture.nativeElement.textContent;
+    for (const item of FAQ_DATA) {
+      expect(text).toContain(`./m4gns ${item.command}`);
+    }
+  });
 
-    for (let i = 0; i < articles.length; i++) {
-      const heading = articles[i].querySelector('h3')?.textContent?.trim();
-      const answer = articles[i].querySelector('p')?.textContent?.trim();
-      expect(heading).toBe(FAQ_DATA[i].question);
-      expect(answer).toBe(FAQ_DATA[i].answer);
+  it('abre a primeira pergunta por padrão', () => {
+    const first = fixture.nativeElement.querySelector('button[aria-expanded]') as HTMLButtonElement;
+    expect(first.getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('alterna a resposta ao clicar no comando', () => {
+    const first = fixture.nativeElement.querySelector('button[aria-expanded]') as HTMLButtonElement;
+
+    first.click();
+    fixture.detectChanges();
+    expect(first.getAttribute('aria-expanded')).toBe('false');
+
+    first.click();
+    fixture.detectChanges();
+    expect(first.getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('mantém todas as respostas no DOM (AEO: crawlers leem o HTML cru)', () => {
+    const text = fixture.nativeElement.textContent;
+    for (const item of FAQ_DATA) {
+      expect(text).toContain(item.answer);
     }
   });
 });
