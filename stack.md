@@ -47,6 +47,7 @@ src/
     │   ├── services/              # Oferta (3 cards) + credibilidade
     │   ├── stack/                 # Acordeão de ferramentas (signal)
     │   ├── work/                  # Casos reais vendidos (parallax scrub)
+    │   ├── faq/                   # Terminal interativo (./m4gns --flag + --help) — datilografia fora da NgZone
     │   ├── contact/               # Terminal criptografado + 3 protocolos
     │   └── footer/                # CTA agressiva Instagram + legal
     └── shared/                    # UI reutilizável
@@ -60,7 +61,7 @@ src/
 
 | Decisão | Detalhe |
 |---------|---------|
-| **Fontes (Anti-Clichê, inegociável)** | **Display:** `Syne` — títulos.<br>**Corpo:** `Space Grotesk` — UI/parágrafos.<br>**Mono/Dados:** `JetBrains Mono` — terminais, logs, metadados.<br>**Proibido:** Roboto, Montserrat, Open Sans, Inter, Poppins. |
+| **Fontes (Anti-Clichê, inegociável)** | **Display:** `Syne` — títulos.<br>**Corpo:** `Space Grotesk` — UI/parágrafos.<br>**Mono/Dados:** `JetBrains Mono` — terminais, logs, metadados.<br>**Proibido:** Roboto, Montserrat, Open Sans, Inter, Poppins.<br>**Auto-hospedadas:** woff2 em `src/styles/fonts/` (via `fonts.scss`), `font-display: swap` — zero dependência de terceiros no runtime (sem Google Fonts → sem fallback Segoe UI/Roboto ao vivo). |
 | **Tokens (`@theme`)** | `--color-void/ink/panel/elevated`, `--color-line`, `--color-text/muted/meta/dim`, `--color-signal` (#10B981), `--color-alert` (#F59E0B), `--color-uplink` (#38BDF8). |
 | **Dark-only** | `color-scheme: dark`; `prefers-reduced-motion` reduz animações a ~0s. |
 | **Grid transitions** | Acordeão animado via `grid-template-rows: 0fr → 1fr` puro CSS. |
@@ -183,7 +184,7 @@ Tom: seco, técnico, orientado a resultado, imperativo de engenharia.
 | Origin | GitHub (main) → Vercel deploy atômico |
 | Build | `@angular/build` (esbuild), `outputHashing: all`, budgets 1MB/1.2MB |
 | Assets | Cache imutável (1 ano) + Brotli; ícones PNG (`apple-touch-icon`, `icon-512`) + `og-card.png` |
-| Fontes | Space Grotesk / Syne / JetBrains Mono via Google Fonts (`display=swap`, preconnect) |
+| Fontes | Space Grotesk / Syne / JetBrains Mono — woff2 auto-hospedados (same-origin, cache imutável 1 ano; sem Google Fonts no runtime) |
 | Analytics | Vercel Speed Insights (zero cookies) |
 | Monitoring | Vercel Firewall Logs + Attack Mode dashboard |
 
@@ -205,6 +206,6 @@ Tom: seco, técnico, orientado a resultado, imperativo de engenharia.
 
 ---
 
-**Versão**: 2.2 (clean rebuild — Vercel-only, otimização de assets & copy)
-**Última atualização**: 2026-10-10
+**Versão**: 2.3 (fontes auto-hospedadas, FAQ terminal, canais em evidência)
+**Última atualização**: 2026-10-13
 **Classificação**: Internal — Technical Architecture

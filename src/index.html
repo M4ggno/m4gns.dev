@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Segurança: Forçar HTTPS e Prevenir Conteúdo Misto (Mixed Content) -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self'; upgrade-insecure-requests;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self'; upgrade-insecure-requests;">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
@@ -151,11 +151,7 @@
   }
   </script>
 
-  <!-- Tipografia Editorial Industrial: Space Grotesk (texto), Syne (display), JetBrains Mono (dados) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-</head>
+  </head>
 <body class="bg-[#050505] text-[#F5F5F5] antialiased selection:bg-white selection:text-black">
   <app-root></app-root>
 </body>
