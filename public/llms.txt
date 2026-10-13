@@ -1,0 +1,42 @@
+# M4GNS.DEV
+
+> Engenharia de software sob demanda. Landing pages de alta conversão e sistemas web em produção, do contrato ao deploy na edge (Vercel). Feito no Brasil (UTC-03), resposta em até 48h.
+
+## Sobre
+
+M4GNS.DEV é o estúdio de engenharia de software de Magno de Souza Carneiro Filho (m4gns). Site institucional de seção única: serviços, ferramentas, casos reais em produção, FAQ e contato direto (sem formulário).
+
+## Serviços
+
+- Landing pages de alta conversão (Angular + Tailwind, Core Web Vitals no verde, SEO técnico).
+- Sistemas e painéis web sob medida: SPAs, CRMs, catálogos, automações de processo.
+- E-commerces enxutos e integrações (CMS headless, APIs tipadas, gateways de pagamento).
+- Diagnóstico técnico gratuito em até 48h; escopo, prazo e preço fechados por escrito.
+
+## Stack
+
+- Frontend: Angular (Signals, standalone), TypeScript, Tailwind CSS.
+- Visual 3D: Three.js + GSAP + ScrollTrigger.
+- Backend: Spring Boot (Java) e Django (Python).
+- Dados: PostgreSQL.
+- Deploy: Vercel (Edge) com HSTS, CSP, X-Frame-Options, firewall e rate limiting.
+
+## Casos reais (em produção)
+
+- [Simone Cordeiro — Psicologia Clínica](https://simonecordeiro.aureaecosystembiosite.com/): landing page para psicóloga (CRP 13/7004), Patos/PB, atendimento presencial e online.
+- [Dra. Anne Valéria — Pneumo · Alergo · Imuno](https://landing-page-dra-anne-valeria.vercel.app/): landing page para médica com mais de 37 anos de atuação e presença em 5 cidades.
+
+## Como trabalhar
+
+1. Diagnóstico técnico (até 48h, gratuito).
+2. Proposta por escrito: escopo, prazo e preço.
+3. Desenvolvimento com entrega semanal.
+4. Deploy em produção; manutenção opcional (plano mensal ou sob demanda).
+
+Prazos típicos: landing pages de 7 a 14 dias; sistemas sob medida de 4 a 12 semanas.
+
+## Contato
+
+- E-mail: contato@m4gns.dev
+- Instagram: https://www.instagram.com/m4gns.dev
+- GitHub: https://github.com/m4gns
