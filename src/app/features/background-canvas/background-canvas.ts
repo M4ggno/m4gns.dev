@@ -75,11 +75,14 @@ export class BackgroundCanvasComponent {
     });
 
     // Aba oculta => sem render. Economia de bateria/CPU.
-    document.addEventListener('visibilitychange', () => {
-      if (!this.scene) return;
-      if (document.hidden) this.scene.stop();
-      else if (!this.attackMode.active()) this.scene.start();
-    });
+    // Guard: o prerender (SSG) roda o construtor no servidor, sem `document`.
+    if (typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', () => {
+        if (!this.scene) return;
+        if (document.hidden) this.scene.stop();
+        else if (!this.attackMode.active()) this.scene.start();
+      });
+    }
 
     this.destroyRef.onDestroy(() => this.scene?.dispose());
   }

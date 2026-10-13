@@ -1,5 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "ng build",
+  "outputDirectory": "dist/m4gns-dev/browser",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [

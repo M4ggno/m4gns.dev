@@ -21,6 +21,10 @@ export class RevealDirective implements AfterViewInit {
   private readonly destroyRef = inject(DestroyRef);
 
   ngAfterViewInit(): void {
+    // No prerender (SSG) este hook roda no servidor, onde não existe `window`.
+    // Sem o guard, o acesso a matchMedia/GSAP quebraria o build.
+    if (typeof window === 'undefined') return;
+
     this.ngZone.runOutsideAngular(() => {
       if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
 
