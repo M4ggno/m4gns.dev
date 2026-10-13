@@ -95,7 +95,7 @@ export class ServicesComponent {
       title: 'Integrações e performance',
       description:
         'CMS headless, gateways de pagamento, webhooks e auditoria de performance em apps existentes. Otimização com base em dados, não em achismo.',
-      deliverables: ['Lighthouse ≥ 95', 'Cache e edge strategy', 'Monitoramento e alertas'],
+      deliverables: ['Lighthouse ≥ 95', 'Cache e CDN strategy', 'Monitoramento e alertas'],
     },
   ];
 }

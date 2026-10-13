@@ -52,7 +52,7 @@ export const STACK_DATA: StackItem[] = [
     category: 'INFRAESTRUTURA',
     icon: 'icons/git.svg',
     description:
-      'Deploy na edge Vercel, previews por PR e rollback instantâneo. Pipeline de revisão rígida antes de qualquer merge.',
+      'Deploy na Vercel, previews por PR e rollback instantâneo. Pipeline de revisão rígida antes de qualquer merge.',
     strength: 'CI/CD & DEPLOY',
   },
   {

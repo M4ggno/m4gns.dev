@@ -20,7 +20,7 @@ import { MotionService } from '@core/motion/motion.service';
         M4GNS.DEV
       </a>
 
-      <span class="text-[10px] tracking-widest text-[#666666]">VERCEL EDGE // SÃO PAULO</span>
+      <span class="text-[10px] tracking-widest text-[#666666]">VERCEL // SÃO PAULO</span>
     </header>
 
     <section id="top" class="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-24 text-center">

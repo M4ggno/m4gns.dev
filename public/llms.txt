@@ -1,6 +1,6 @@
 # M4GNS.DEV
 
-> Engenharia de software sob demanda. Landing pages de alta conversão e sistemas web em produção, do contrato ao deploy na edge (Vercel). Feito no Brasil (UTC-03), resposta em até 48h.
+> Engenharia de software sob demanda. Landing pages de alta conversão e sistemas web em produção, do contrato ao deploy na Vercel. Feito no Brasil (UTC-03), resposta em até 48h.
 
 ## Sobre
 
@@ -19,7 +19,7 @@ M4GNS.DEV é o estúdio de engenharia de software de Magno de Souza Carneiro Fil
 - Visual 3D: Three.js + GSAP + ScrollTrigger.
 - Backend: Spring Boot (Java) e Django (Python).
 - Dados: PostgreSQL.
-- Deploy: Vercel (Edge) com HSTS, CSP, X-Frame-Options, firewall e rate limiting.
+- Deploy: Vercel (estático) com HSTS, CSP, X-Frame-Options, firewall e rate limiting.
 
 ## Casos reais (em produção)
 

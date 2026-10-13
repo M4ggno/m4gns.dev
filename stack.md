@@ -4,7 +4,7 @@ Documento técnico do `m4gns.dev` — landing page comercial que vende **serviç
 
 Estética: **Orbital Infrastructure / Cyber-Noir** — redes interconectadas, anéis orbitais, poeira cósmica com profundidade de campo, terminais de comunicação criptografada, logs de sistema em tempo real.
 
-> **Decisão de arquitetura (importante):** deploy **100% Vercel, estático, sem Next.js**. A proteção de borda é feita por `vercel.json` (headers/rewrites) **+ Vercel Firewall** (WAF/rate limiting). Não existe `middleware.ts` / Vercel Edge Middleware (esse runtime só executa em Next.js — em SPA Angular é ignorado silenciosamente; a alternativa equivalente era migrar o projeto inteiro para Next.js, fora do escopo).
+> **Decisão de arquitetura (importante):** deploy **100% Vercel, estático, sem Next.js**. A proteção de borda é feita por `vercel.json` (headers/rewrites) **+ Vercel Firewall** (WAF/rate limiting). Não existe `middleware.ts` / Vercel Edge Middleware (runtime deprecado — docs 2026: Vercel recomenda Vercel Functions com runtime Node.js; em SPA Angular estático nada disso roda e nada é necessário).
 
 ---
 
@@ -126,7 +126,7 @@ Interação com o **ponteiro sobre as partículas**: o cursor é projetado do ND
 - **Managed Rules / Custom Rules**: ofuscação em picos. Logs de WAF no dashboard.
 - **WAF**: bot management para travas de bots conhecidos.
 
-> **Por que não `middleware.ts`?** Edge Middleware é runtime exclusivo do Next.js. Num build Angular estático ele é ignorado — uma falsa sensação de segurança. O equivalente Vercel-nativo está todo em `vercel.json` + Firewall acima. (Fonte: docs Vercel — Edge Middleware roda em projetos Next.js; projetos não-Next usam `vercel.json` e Firewall.)
+> **Por que não `middleware.ts`?** Edge Middleware / Edge Functions foram **deprecados** pela Vercel (docs 2026: substituídos por Vercel Routing Middleware / Vercel Functions com runtime Node.js — "do not use them for new projects"). Num build Angular estático continuam ignorados — a falsa sensação de segurança permanece sendo a regra. O equivalente Vercel-nativo está em `vercel.json` + Firewall acima.
 
 ### 6.3 SSL/TLS & Domínio
 
@@ -206,6 +206,6 @@ Tom: seco, técnico, orientado a resultado, imperativo de engenharia.
 
 ---
 
-**Versão**: 2.3 (fontes auto-hospedadas, FAQ terminal, canais em evidência)
+**Versão**: 2.4 (copy sem "edge" — Vercel deprecou Edge Functions; deploy continua 100% estático)
 **Última atualização**: 2026-10-13
 **Classificação**: Internal — Technical Architecture

@@ -68,7 +68,7 @@ import { MotionService } from '@core/motion/motion.service';
               M4GNS.DEV
             </a>
             <p class="mt-4 max-w-xs text-sm leading-relaxed text-[#666666]">
-              Landing pages e sistemas em produção, do contrato ao deploy na edge. Sem vitrine, sem ruído.
+              Landing pages e sistemas em produção, do contrato ao deploy na Vercel. Sem vitrine, sem ruído.
             </p>
           </div>
 
@@ -95,7 +95,7 @@ import { MotionService } from '@core/motion/motion.service';
             <div class="mt-5 flex gap-3 font-mono text-[10px] tracking-widest text-[#666666]">
               <span class="border border-white/10 px-2 py-1">HSTS</span>
               <span class="border border-white/10 px-2 py-1">CSP</span>
-              <span class="border border-white/10 px-2 py-1 text-emerald-500">EDGE</span>
+              <span class="border border-white/10 px-2 py-1 text-emerald-500">STATIC</span>
             </div>
           </div>
         </div>
@@ -103,7 +103,7 @@ import { MotionService } from '@core/motion/motion.service';
         <!-- Barra legal -->
         <div class="mt-14 flex flex-col items-start justify-between gap-3 border-t border-white/5 pt-6 font-mono text-[10px] tracking-widest text-[#444444] md:flex-row md:items-center">
           <span>© 2026 {{ SITE.domain }} — {{ SITE.operator }}</span>
-          <span>FEITO NO BRASIL // RODANDO NA EDGE // SEM COOKIES DE RASTREAMENTO</span>
+          <span>FEITO NO BRASIL // RODANDO NA VERCEL // SEM COOKIES DE RASTREAMENTO</span>
         </div>
       </div>
     </footer>
