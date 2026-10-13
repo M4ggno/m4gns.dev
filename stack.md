@@ -153,7 +153,7 @@ Quando ativo: Lenis para, `gsap.ticker.sleep()`, canvas pausa, banner fixo com `
 |------------|-------|---------------|
 | **PRIMARY** | `contato@m4gns.dev` | `mailto:` com assunto sugerido `[PROJETO] Escopo & Prazo`. Resposta ≤ 48h. |
 | **SECONDARY** | Instagram `@m4gns.dev` | `https://www.instagram.com/m4gns.dev` — feed técnico não curado (bastidores, arquitetura, falhas). Promovido **agressivamente** no rodapé. |
-| **ARCHIVE** | GitHub `github.com/m4gns` | Repositórios públicos, transparência. |
+| **ARCHIVE** | GitHub `github.com/M4ggno` | Repositórios públicos, transparência. |
 
 **UI:** terminal de "uplink criptografado" com log digitando (TLS/DNS/CSP/WAF/MAIL), relógio UTC, 3 protocol cards (emerald/amber/dim) e footer com CTA Instagram + e-mail.
 

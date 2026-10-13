@@ -21,8 +21,8 @@ export const SITE = {
       label: 'Feed diário de engenharia',
     },
     github: {
-      handle: 'github.com/m4gns',
-      url: 'https://github.com/m4gns',
+      handle: 'github.com/M4ggno',
+      url: 'https://github.com/M4ggno',
     },
   },
 
