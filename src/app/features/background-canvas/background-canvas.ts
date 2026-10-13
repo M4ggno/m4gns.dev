@@ -16,6 +16,9 @@ import { OrbitalScene } from '@core/three/orbital-scene';
 /** Gestos que podem conceder permissão de sensores no iOS — o primeiro dispara o pedido. */
 const GYRO_GESTURES = ['pointerdown', 'touchend', 'click'] as const;
 
+/** Registro local de "sheet de sensores já visto" — preferência first-party, não é cookie/rastreamento. */
+const SHEET_SEEN_KEY = 'm4gns:gyro-sheet-seen';
+
 /**
  * Hospeda o <canvas> fullscreen da cena orbital.
  * Responsabilidade única: ciclo de vida + encaminhamento de eventos.
@@ -36,8 +39,8 @@ const GYRO_GESTURES = ['pointerdown', 'touchend', 'click'] as const;
       style="background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,0.5) 2px 3px);"
     ></div>
 
-    <!-- No iPhone (iOS/Safari) a permissão de sensores exige gesto explícito: botão dedicado = gesto válido + feedback. Gate por device (isIPhone) — Chrome 154+ (Android/desktop) também expõe requestPermission e botão fixo lá é ruído. -->
-    @if (motionHint() && !motionGranted()) {
+    <!-- Affordance persistente (iPhone-only): pill discreto no canto. Some enquanto o sheet de primeira visita estiver aberto. -->
+    @if (motionHint() && !motionGranted() && !motionSheetOpen()) {
       <button
         type="button"
         (click)="requestGyro()"
@@ -46,6 +49,31 @@ const GYRO_GESTURES = ['pointerdown', 'touchend', 'click'] as const;
         <span class="h-2 w-2 rounded-full bg-[#10B981] animate-pulse"></span>
         Ativar giroscópio
       </button>
+    }
+
+    <!-- Primeira visita (iPhone): bottom-sheet discreto com contexto. Não bloqueia o topo; some ao conceder. -->
+    @if (motionSheetOpen() && !motionGranted()) {
+      <div
+        role="region"
+        aria-label="Sensores de movimento"
+        class="motion-sheet fixed inset-x-4 bottom-4 z-40 mx-auto max-w-sm border border-white/10 bg-[#0A0A0A]/95 p-5 font-mono text-xs text-[#8A8A8A] shadow-[0_0_40px_rgba(0,0,0,0.6)] backdrop-blur-md"
+      >
+        <div class="flex items-start justify-between gap-4">
+          <p class="text-[10px] uppercase tracking-[0.3em] text-[#10B981]">// Sensores de movimento</p>
+          <button type="button" (click)="dismissSheet()" aria-label="Fechar" class="-mt-1 text-sm text-[#666666] transition-colors hover:text-white">✕</button>
+        </div>
+        <p class="mt-3 leading-relaxed text-[#AAAAAA]">
+          Incline o aparelho para explorar a cena orbital. Sem sensores, a navegação segue pelo toque.
+        </p>
+        <button
+          type="button"
+          (click)="requestGyro()"
+          class="mt-4 flex w-full items-center justify-center gap-3 border border-[#10B981]/60 bg-[#050505] px-5 py-3 text-[11px] uppercase tracking-[0.25em] text-white transition-all hover:border-[#10B981]"
+        >
+          <span class="h-2 w-2 rounded-full bg-[#10B981] animate-pulse"></span>
+          Ativar giroscópio
+        </button>
+      </div>
     }
   `,
 })
@@ -59,10 +87,14 @@ export class BackgroundCanvasComponent {
   private scene?: OrbitalScene;
   private gyroAsked = false;
   private tiltOrigin?: { beta: number; gamma: number };
+  private sheetSeenOnce = this.hasSeenSheet();
+  private sheetTimer?: number;
 
   /** Exibe o botão de ativar movimento enquanto a permissão ainda não foi dada. */
   protected readonly motionHint = signal(false);
   protected readonly motionGranted = signal(false);
+  /** Bottom-sheet contextual de primeira visita (iPhone): sobe depois do boot, some ao conceder. */
+  protected readonly motionSheetOpen = signal(false);
 
   constructor() {
     afterNextRender(() => this.init());
@@ -131,6 +163,16 @@ export class BackgroundCanvasComponent {
       // (154+/152+) também expõem requestPermission agora — botão fixo lá é ruído.
       if (OrbitalSceneHelpers.isIPhone()) {
         this.motionHint.set(true);
+        // Primeira visita: bottom-sheet contextual após o boot. Depois disso,
+        // sobra só o pill do canto (fallback permanente, mas silencioso).
+        if (!this.sheetSeenOnce) {
+          this.sheetTimer = window.setTimeout(() => {
+            if (!this.motionGranted()) this.motionSheetOpen.set(true);
+          }, 1400);
+          this.destroyRef.onDestroy(() => {
+            if (this.sheetTimer !== undefined) window.clearTimeout(this.sheetTimer);
+          });
+        }
       }
     }
 
@@ -177,6 +219,8 @@ export class BackgroundCanvasComponent {
         if (state === 'granted') {
           this.motionGranted.set(true);
           this.motionHint.set(false);
+          this.motionSheetOpen.set(false);
+          this.markSheetSeen();
         } else {
           // Não concedido: libera nova tentativa (o botão segue visível).
           this.gyroAsked = false;
@@ -186,6 +230,31 @@ export class BackgroundCanvasComponent {
         this.gyroAsked = false;
       });
   };
+
+  /** Fecha o sheet sem conceder: o pill do canto continua como fallback silencioso. */
+  protected readonly dismissSheet = (): void => {
+    this.motionSheetOpen.set(false);
+    this.markSheetSeen();
+  };
+
+  private hasSeenSheet(): boolean {
+    if (typeof window === 'undefined') return true;
+    try {
+      return window.localStorage.getItem(SHEET_SEEN_KEY) === '1';
+    } catch {
+      return true; // storage indisponível: não insiste no sheet
+    }
+  }
+
+  private markSheetSeen(): void {
+    this.sheetSeenOnce = true;
+    if (typeof window === 'undefined') return;
+    try {
+      window.localStorage.setItem(SHEET_SEEN_KEY, '1');
+    } catch {
+      /* storage indisponível (Safari privado etc.) — segue sem persistir */
+    }
+  }
 
   private teardownInteraction(): void {
     window.removeEventListener('pointermove', this.onPointerMove);
