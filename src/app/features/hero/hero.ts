@@ -20,14 +20,6 @@ import { MotionService } from '@core/motion/motion.service';
         M4GNS.DEV
       </a>
 
-      <nav class="hidden gap-7 tracking-widest md:flex" aria-label="Navegação principal">
-        @for (item of nav; track item.target) {
-          <a [href]="item.target" (click)="go($event, item.target)" class="py-1 transition-colors hover:text-white">
-            [ {{ item.index }} / {{ item.label }} ]
-          </a>
-        }
-      </nav>
-
       <span class="text-[10px] tracking-widest text-[#666666]">VERCEL EDGE // SÃO PAULO</span>
     </header>
 
@@ -97,14 +89,6 @@ export class HeroComponent {
   readonly mailtoHref = `mailto:${SITE.email.address}?subject=${encodeURIComponent(SITE.email.subject)}`;
 
   protected readonly SITE = SITE;
-
-  readonly nav = [
-    { index: '01', label: 'SERVIÇOS', target: '#services' },
-    { index: '02', label: 'STACK', target: '#stack' },
-    { index: '03', label: 'TRABALHO', target: '#work' },
-    { index: '04', label: 'FAQ', target: '#faq' },
-    { index: '05', label: 'CONTATO', target: '#contact' },
-  ];
 
   private readonly taglineText = 'FRONTEND // BACKEND // INFRA — SEM RUÍDO';
   private readonly bootLabelFull = 'ESTABELECENDO LIGAÇÃO DIRETA...';
