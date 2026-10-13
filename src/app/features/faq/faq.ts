@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  NgZone,
   inject,
   signal,
 } from '@angular/core';
@@ -175,6 +176,7 @@ export class FaqComponent {
   protected readonly faqs = FAQ_DATA;
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly ngZone = inject(NgZone);
 
   /** Qual pergunta está aberta. `-1` = nenhuma. Primeira aberta por padrão. */
   private readonly openIndex = signal(0);
@@ -219,7 +221,7 @@ export class FaqComponent {
     this.type(index);
   }
 
-  /** Datilografia a resposta — só no cliente e com reduced-motion respeitado. */
+  /** Datilografia a resposta — só no cliente, fora da NgZone (stack.md §1) e com reduced-motion respeitado. */
   private type(index: number): void {
     if (typeof window === 'undefined') return;
 
@@ -229,21 +231,25 @@ export class FaqComponent {
       return;
     }
 
-    this.typingState.update((map) => ({ ...map, [index]: true }));
-    this.typed.update((map) => ({ ...map, [index]: '' }));
+    // Datilografia roda fora da NgZone (padrão do contact terminal): os updates
+    // são por signal — o agendamento de change detection independe de zone.
+    this.ngZone.runOutsideAngular(() => {
+      this.typingState.update((map) => ({ ...map, [index]: true }));
+      this.typed.update((map) => ({ ...map, [index]: '' }));
 
-    let n = 0;
-    const tick = () => {
-      n += 1;
-      this.typed.update((map) => ({ ...map, [index]: full.slice(0, n) }));
-      if (n < full.length) {
-        const id = setTimeout(tick, 12 + Math.random() * 18);
-        this.timers.add(id);
-      } else {
-        this.typingState.update((map) => ({ ...map, [index]: false }));
-      }
-    };
-    const id = setTimeout(tick, 40);
-    this.timers.add(id);
+      let n = 0;
+      const tick = () => {
+        n += 1;
+        this.typed.update((map) => ({ ...map, [index]: full.slice(0, n) }));
+        if (n < full.length) {
+          const id = setTimeout(tick, 12 + Math.random() * 18);
+          this.timers.add(id);
+        } else {
+          this.typingState.update((map) => ({ ...map, [index]: false }));
+        }
+      };
+      const id = setTimeout(tick, 40);
+      this.timers.add(id);
+    });
   }
 }
