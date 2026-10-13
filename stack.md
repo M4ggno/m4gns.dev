@@ -206,6 +206,29 @@ Tom: seco, técnico, orientado a resultado, imperativo de engenharia.
 
 ---
 
-**Versão**: 2.4 (copy sem "edge" — Vercel deprecou Edge Functions; deploy continua 100% estático)
+## 11. Claim Watch (fatos de terceiros no copy)
+
+Toda afirmação sobre plataforma/produto que o site faz precisa de fonte verificada.
+Revisar **a cada 6 meses** ou quando a Vercel postar mudança no changelog.
+
+| Claim pública | Onde aparece | Status / fonte |
+|---|---|---|
+| `VERCEL // SÃO PAULO` | navbar (hero.ts) | Vercel Edge Network — rede global de entrega de estáticos; região BR (São Paulo). |
+| Deploy 100% estático, sem functions | footer, llms.txt, og:description | Build SSG (`@angular/build` + prerender); `vercel.json` sem functions/middleware/runtime. |
+| Badge `STATIC` / `RODANDO NA VERCEL` | footer | Idem acima. |
+| Firewall + rate limit 100r/10s/IP | terminal de contato | Vercel Firewall (WAF/rate limiting) — configurado no painel do projeto. |
+| SSL/TLS automático + HSTS (`.dev`) | footer, llms.txt | Vercel SSL; CAA restrito a Let's Encrypt/ZeroSSL. |
+| E-mail `contato@m4gns.dev` (MX/DKIM/DMARC/MTA-STS) | hero, footer | Google Workspace. |
+
+**Linha do tempo "não falar bobeira":**
+- 2025-06-25 — changelog Vercel: Edge Middleware/Edge Functions passaram a rodar na infra unificada de Vercel Functions.
+- 2026-07-29 — docs `vercel.com/docs/functions/runtimes/edge/edge-functions`: *"Edge Functions are deprecated. Do not use them for new projects"* → usar Vercel Functions (runtime Node.js).
+- 2026-10-13 — copy do site sem "edge"; este watch criado.
+
+**Pontos de atenção:** se o site ganhar função serverless/middleware no futuro, o copy "estático" e o badge `STATIC` precisam ser revistos juntos. Fontes a checar: `vercel.com/changelog` e `vercel.com/docs`.
+
+---
+
+**Versão**: 2.5 (copy sem "edge" + §11 Claim Watch)
 **Última atualização**: 2026-10-13
 **Classificação**: Internal — Technical Architecture
