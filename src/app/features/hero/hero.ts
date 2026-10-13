@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, NgZone, afterNextRender, inject, viewChild } from '@angular/core';
 import { gsap } from 'gsap';
+import { SITE } from '@core/site.config';
 import { MotionService } from '@core/motion/motion.service';
 
 /**
@@ -59,6 +60,13 @@ import { MotionService } from '@core/motion/motion.service';
         <p #tagline class="font-mono text-xs uppercase tracking-[0.35em] text-[#8A8A8A] opacity-0 md:text-sm" aria-live="polite">
           {{ typed }}<span class="animate-pulse">_</span>
         </p>
+
+        <a #cta [href]="mailtoHref"
+           class="mt-2 inline-flex items-center gap-3 border border-white/15 bg-white/[0.04] px-7 py-3.5 font-mono text-[11px] uppercase tracking-[0.3em] text-white opacity-0 translate-y-4 transition-colors hover:border-emerald-400/70 hover:text-emerald-300 md:text-xs">
+          <span class="h-1.5 w-1.5 rounded-full bg-[#10B981]"></span>
+          {{ SITE.email.address }}
+          <span aria-hidden="true">↗</span>
+        </a>
       </div>
 
       <div #scrollIndicator class="pointer-events-none absolute bottom-6 flex flex-col items-center opacity-0 md:bottom-10">
@@ -79,9 +87,13 @@ export class HeroComponent {
   private readonly mainTitle = viewChild<ElementRef<HTMLElement>>('mainTitle');
   private readonly tagline = viewChild<ElementRef<HTMLElement>>('tagline');
   private readonly scrollIndicator = viewChild<ElementRef<HTMLElement>>('scrollIndicator');
+  private readonly cta = viewChild<ElementRef<HTMLElement>>('cta');
 
   visible = false;
   typed = '';
+  readonly mailtoHref = `mailto:${SITE.email.address}?subject=${encodeURIComponent(SITE.email.subject)}`;
+
+  protected readonly SITE = SITE;
 
   readonly nav = [
     { index: '01', label: 'SERVIÇOS', target: '#services' },
@@ -109,6 +121,7 @@ export class HeroComponent {
     const eyebrow = this.eyebrow()?.nativeElement ?? null;
     const title = this.mainTitle()?.nativeElement ?? null;
     const indicator = this.scrollIndicator()?.nativeElement ?? null;
+    const ctaLink = this.cta()?.nativeElement ?? null;
 
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
       this.setVisible(true);
@@ -124,6 +137,10 @@ export class HeroComponent {
         title.style.transform = 'none';
       }
       if (indicator) indicator.style.opacity = '1';
+      if (ctaLink) {
+        ctaLink.style.opacity = '1';
+        ctaLink.style.transform = 'none';
+      }
       return;
     }
 
@@ -140,6 +157,7 @@ export class HeroComponent {
       .to(eyebrow, { opacity: 1, y: 0, duration: 0.7 }, '-=0.7')
       .to(title, { opacity: 1, y: 0, duration: 1 }, '-=0.55')
       .call(() => this.typeTagline())
+      .to(ctaLink, { opacity: 1, y: 0, duration: 0.6 }, '-=0.15')
       .to(indicator, { opacity: 1, duration: 0.7 }, '-=0.2');
   }
 

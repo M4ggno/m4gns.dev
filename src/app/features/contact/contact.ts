@@ -118,7 +118,7 @@ import { SITE } from '@core/site.config';
                 [href]="SITE.social.github.url"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="mt-6 flex w-full items-center justify-between gap-4 border border-white/10 px-5 py-3.5 font-mono text-xs tracking-widest text-white transition-colors hover:border-white/40"
+                class="mt-6 flex w-full items-center justify-between gap-4 border border-white/15 px-5 py-3.5 font-mono text-xs tracking-widest text-white transition-colors hover:border-white/70 hover:bg-white/5"
               >
                 <span>{{ SITE.social.github.handle }}</span>
                 <span aria-hidden="true">↗</span>

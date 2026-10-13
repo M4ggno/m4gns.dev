@@ -41,10 +41,10 @@ const GYRO_GESTURES = ['pointerdown', 'touchend', 'click'] as const;
       <button
         type="button"
         (click)="requestGyro()"
-        class="fixed bottom-4 left-4 z-40 flex items-center gap-2 border border-white/20 bg-black/70 px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-[#A3A3A3] backdrop-blur-md transition-colors hover:border-white/50 hover:text-white"
+        class="fixed bottom-5 left-5 z-40 flex items-center gap-3 border border-[#10B981]/60 bg-[#050505]/90 px-5 py-3 font-mono text-[11px] uppercase tracking-[0.25em] text-white shadow-[0_0_20px_rgba(16,185,129,0.15)] backdrop-blur-md transition-all hover:border-[#10B981] hover:shadow-[0_0_32px_rgba(16,185,129,0.35)] sm:bottom-6 sm:left-6"
       >
-        <span class="h-1.5 w-1.5 rounded-full bg-[#10B981]"></span>
-        Ativar movimento
+        <span class="h-2 w-2 rounded-full bg-[#10B981] animate-pulse"></span>
+        Ativar giroscópio
       </button>
     }
   `,

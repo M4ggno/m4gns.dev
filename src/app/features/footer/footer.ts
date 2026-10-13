@@ -48,6 +48,15 @@ import { MotionService } from '@core/motion/motion.service';
               <span>{{ SITE.email.address }}</span>
               <span class="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">↗</span>
             </a>
+            <a
+              [href]="SITE.social.github.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex w-full items-center justify-between gap-4 border border-white/20 px-6 py-4 font-mono text-sm tracking-widest text-white transition-colors hover:border-white hover:bg-white/5 md:w-80"
+            >
+              <span>{{ SITE.social.github.handle }}</span>
+              <span class="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">↗</span>
+            </a>
           </div>
         </div>
 
