@@ -6,8 +6,12 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Segurança: Forçar HTTPS e Prevenir Conteúdo Misto (Mixed Content) -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self'; upgrade-insecure-requests;">
+  <!-- Segurança: a CSP é entregue pelo header HTTP em vercel.json (fonte única).
+       A meta http-equiv de Content-Security-Policy foi removida de propósito: CSP
+       duplicada é aplicada como interseção, e em meta a diretiva frame-ancestors é ignorada.
+       O 'unsafe-inline' no script-src é intencional: o loader de CSS crítico do Angular
+       injeta um script inline (swap de data-beasties-media); removê-lo deixa o site sem
+       o stylesheet completo. -->
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
