@@ -1,4 +1,4 @@
-# robots.txt for https://m4gns.dev/
+# robots.txt para https://www.m4gns.dev/ (domínio canônico — apex faz 308 p/ www)
 User-agent: *
 Allow: /
 
@@ -45,4 +45,4 @@ User-agent: cohere-ai
 Allow: /
 
 # Sitemap
-Sitemap: https://m4gns.dev/sitemap.xml
+Sitemap: https://www.m4gns.dev/sitemap.xml
