@@ -224,6 +224,7 @@ Revisar **a cada 6 meses** ou quando a Vercel postar mudança no changelog.
 - 2025-06-25 — changelog Vercel: Edge Middleware/Edge Functions passaram a rodar na infra unificada de Vercel Functions.
 - 2026-07-29 — docs `vercel.com/docs/functions/runtimes/edge/edge-functions`: *"Edge Functions are deprecated. Do not use them for new projects"* → usar Vercel Functions (runtime Node.js).
 - 2026-10-13 — copy do site sem "edge"; este watch criado.
+- 2026-10-20 — canonical/og/JSON-LD/sitemap/robots alinhados no domínio **www** (apex faz 308 → www) + **IndexNow** ativo (chave em `public/2d1b68ddec704fca9e5b7964a28be9fe.txt`, URL submetida — protocolo que alimenta Bing/Yandex, base do índice do ChatGPT Search).
 
 **Pontos de atenção:** se o site ganhar função serverless/middleware no futuro, o copy "estático" e o badge `STATIC` precisam ser revistos juntos. Fontes a checar: `vercel.com/changelog` e `vercel.com/docs`.
 
