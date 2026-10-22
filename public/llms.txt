@@ -24,7 +24,7 @@ M4GNS.DEV é o estúdio de engenharia de software de Magno de Souza Carneiro Fil
 ## Casos reais (em produção)
 
 - [Simone Cordeiro — Psicologia Clínica](https://simonecordeiro.aureaecosystembiosite.com/): landing page para psicóloga (CRP 13/7004), Patos/PB, atendimento presencial e online.
-- [Dra. Anne Valéria — Pneumo · Alergo · Imuno](https://landing-page-dra-anne-valeria.vercel.app/): landing page para médica com mais de 37 anos de atuação e presença em 5 cidades.
+- [Dra. Anne Valéria — Pneumo · Alergo · Imuno](https://annevaleria.aureaecosystem.com.br/): landing page para médica com mais de 37 anos de atuação e presença em 5 cidades.
 
 ## Como trabalhar
 

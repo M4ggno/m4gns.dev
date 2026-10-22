@@ -32,7 +32,7 @@ export const WORK_DATA: WorkItem[] = [
     description:
       'Landing page premium para médica com 37 anos de exercício: três especialidades, exames (espirometria, polissonografia, imunoterapia), atendimento em cinco cidades do Nordeste e agendamento direto pelo WhatsApp.',
     tech: ['One-Page', 'SEO Médico', 'WhatsApp'],
-    link: 'https://landing-page-dra-anne-valeria.vercel.app/',
+    link: 'https://annevaleria.aureaecosystem.com.br/',
     image: 'images/anne-mockup.svg',
     metrics: '37 ANOS // 3 ESPECIALIDADES // 5 CIDADES',
   },

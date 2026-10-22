@@ -23,7 +23,7 @@ import { MotionService } from '@core/motion/motion.service';
       <span class="text-[10px] tracking-widest text-[#666666]">VERCEL // SÃO PAULO</span>
     </header>
 
-    <section id="top" class="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-24 text-center">
+    <section id="top" class="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 pt-24 pb-24 md:pb-48 text-center">
       <!-- Boot overlay: limpa a tela antes do conteúdo entrar. A frase é datilografada
            no cliente (service render mostra completa); o cursor de bloco pisca via CSS
            — anima até no HTML pré-renderizado, antes do JS carregar. -->
